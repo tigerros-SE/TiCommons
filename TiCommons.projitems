@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>61eba249-19f3-48b6-a25b-a4cee90168ba</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>IngameScript</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\CommandLineX.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumX.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\GridTerminalSystemX.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ProgrammableBlockX.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringX.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\TerminalBlockX.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\TextSurfaceX.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IGCTi\IGCTi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IGCTi\Message.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\OneSetProperty.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\InitProperty.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\EnumClass.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Readme.md" />
+  </ItemGroup>
+</Project>
