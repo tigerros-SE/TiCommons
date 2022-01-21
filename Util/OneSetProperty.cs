@@ -26,34 +26,30 @@ namespace IngameScript.TiCommons.Util {
 	/// <para>
 	/// A property that can only be set once. After that, any attempts of changing the property will result in an exception.
 	/// </para>
+	/// 
+	/// <para>
+	/// <example>
+	/// To set this up, use this code:
+	/// <code>
+	/// private <see cref="OneSetProperty{T}"/> _prop { get; set; } = new <see cref="OneSetProperty{T}"/>();
+	/// public string Prop {
+	/// 	get { return _prop.Value; }
+	/// 	set {
+	/// 		_prop.Value = value;
+	///		}
+	/// }
+	/// </code>
+	/// Or, if you don't mind the <c>'Value'</c> property, you can make <c>'Prop'</c> an instance of <see cref="OneSetProperty{T}"/> with auto-implemented properties.
+	/// </example>
+	/// </para>
 	/// </summary>
 	/// <typeparam name="T">The type of the property.</typeparam>
-	public class OneSetProperty<T> {
-		// This might need to be changed to IsSet = false;
-		private bool IsSet { get; set; } = false;
-		private T _value { get;  set; }
-		public T Value {
-			get {
-				return _value;
-			} set {
-				if (IsSet) {
-					throw new Exception("You can only set this property once.");
-				} else {
-					_value = value;
-					IsSet = true;
-				}
-			}
-		}
+	public class OneSetProperty<T> : XSetPropertyBase<T> {
+		public override int? SetsAllowed { get; set; } = 1;
+		public override string ExceptionMessage { get; set; } = "This property can only be set once.";
 
 		public OneSetProperty() { }
-		public OneSetProperty(T value) {
-			Value = value;
-			IsSet = true;
-		}
-
-		public OneSetProperty(OneSetProperty<T> osp) {
-			Value = osp.Value;
-			IsSet = true;
-		}
+		public OneSetProperty(T value) { Value = value; }
+		public OneSetProperty(OneSetProperty<T> oneSetProperty) { Value = oneSetProperty.Value; }
 	}
 }

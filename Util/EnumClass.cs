@@ -35,6 +35,7 @@ namespace IngameScript.TiCommons.Util {
 	/// </example>
 	/// </summary>
 	public abstract class EnumClass {
+		private OneSetProperty<string> _enumValue { get; set; } = new OneSetProperty<string>();
 		/// <summary>
 		/// This can be only be changed once. I was highly against it, but one of my libraries could not work without it.
 		/// Please try as hard as possible to change this in the constructor.
@@ -43,9 +44,13 @@ namespace IngameScript.TiCommons.Util {
 		/// The string value of the enum.
 		/// </para>
 		/// </summary>
-		public OneSetProperty<string> EnumValue { get; set; }
-		public override string ToString() => EnumValue.Value;
+		public string EnumValue {
+			get { return _enumValue.Value; }
+			set { _enumValue.Value = value; }
+		}
+
+		public override string ToString() => EnumValue;
 		public EnumClass() { }
-		public EnumClass(string value) { EnumValue = new OneSetProperty<string>(value); }
+		public EnumClass(string value) { EnumValue = value; }
 	}
 }

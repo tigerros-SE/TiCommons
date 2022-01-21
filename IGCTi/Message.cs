@@ -42,7 +42,7 @@ namespace IngameScript.TiCommons.IGCTi {
 		}
 
 		public override string ToString() {
-			var tagString = string.Join("", Tags.Select((tag, i) => $"[Tag{i}:{tag.EnumValue.Value}]"));
+			var tagString = string.Join("", Tags.Select((tag, i) => $"[Tag{i}:{tag.EnumValue}]"));
 			
 			return tagString +
 			$"[Data:{Data}]" +

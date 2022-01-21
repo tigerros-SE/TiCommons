@@ -22,32 +22,33 @@ using VRage.Scripting;
 using VRageMath;
 using IngameScript.TiCommons.Extensions;
 using IngameScript.TiCommons.Util;
+using IngameScript.TiCommons.Util.Atlang;
 
 namespace IngameScript.TiCommons.IGCTi {
-	public class IGCTi {
+	public static class IGCTi {
 		#region Properties
 		/// <summary>
 		/// The valid tags.
 		/// The first tag in this collection will be treated as the tag that other blocks listen to.
 		/// The following tags will be embedded into the <see cref="Message"/> itself.
 		/// </summary>
-		public EnumClass[] Tags = new EnumClass[0];
+		//public EnumClass[] Tags = new EnumClass[0];
 		/// <summary>
 		/// The <see cref="IMyIntergridCommunicationSystem"/> that will be used to send messages.
 		/// The usage might not be limited to just sending messages though.
 		/// </summary>
-		public IMyIntergridCommunicationSystem IGC { get; }
+		public static IMyIntergridCommunicationSystem IGC { get; }
 		#endregion
 		#region Constructors
-		public IGCTi(IMyIntergridCommunicationSystem igc, EnumClass[] tags) {
-			IGC = igc;
-			Tags = tags;
-		}
+		//public IGCTi(IMyIntergridCommunicationSystem igc, EnumClass[] tags) {
+		//	IGC = igc;
+		//	Tags = tags;
+		//}
 		#endregion
 		#region Methods
 		/// <summary>
 		/// Finds all occurences of <c>"[<paramref name="itemName"/>:(.*)]"</c>.
-		/// Returns one group - <c>.*</c> (anything).
+		/// Captures one group - <c>.*</c> (anything).
 		/// </summary>
 		private static System.Text.RegularExpressions.Regex MessageRX(string itemName)
 			=> new System.Text.RegularExpressions.Regex($@"\[{itemName}\s*:\s*(.*)\]");
@@ -69,7 +70,7 @@ namespace IngameScript.TiCommons.IGCTi {
 		/// The description.
 		/// This is an optional parameter and it is likely you only need the <paramref name="data"/>.
 		/// </param>
-		public void SendBroadcastMessage<TData>(EnumClass[] tags, TData data, string description = null) {
+		public static void SendBroadcastMessage<TData>(EnumClass[] tags, TData data, string description = null) {
 			if (tags.Length == 0) {
 				throw new ArgumentException("The length of the parameter 'tags' must be higher than 0.");
 			}
@@ -82,17 +83,22 @@ namespace IngameScript.TiCommons.IGCTi {
 		/// Sends a broadcast message using a message object.
 		/// </summary>
 		/// <param name="message">The <see cref="Message"/> object to send.</param>
-		public void SendBroadcastMessage(Message message) {
-			var listen = IGC.RegisterBroadcastListener("tag");
+		public static void SendBroadcastMessage(Message message) {
+			var listen = IGC.RegisterBroadcastListener(message.Tags[0].EnumValue);
 			var msg = listen.AcceptMessage();
-			IGC.SendBroadcastMessage(message.Tags[0].EnumValue.Value, message.ToString());
+			
+			IGC.SendBroadcastMessage(new AtBuilder(message.Tags[0].EnumValue).AddAttribute("#Ti#", true).ToString(), message.ToString());
 		}
 
-		public Message Parse<TTag>(this MyIGCMessage message) where TTag : EnumClass, new() {
+		public static IMyBroadcastListener RegisterBroadcastListenerTi(this IMyIntergridCommunicationSystem igc, EnumClass tag) {
+			return igc.RegisterBroadcastListener(new AtBuilder(new AtObject("Tag", tag.EnumValue)).AddAttribute("#Ti#", true).ToString());
+		}
+
+		public static Message ParseTi<TTag>(this IMyBroadcastListener listener) where TTag : EnumClass, new() {
 			TTag[] tags;
 			var desc = "";
-			var tagsMatch = MessageRX("Tags").Match(message);
-			var descMatch = MessageRX("Description").Match(message);
+			var tagsMatch = MessageRX("Tags").Match(message.Data.ToString());
+			var descMatch = MessageRX("Description").Match(message.Data.ToString());
 
 			if (tagsMatch.Success) {
 				var tagGroups = tagsMatch.Groups;
@@ -100,14 +106,14 @@ namespace IngameScript.TiCommons.IGCTi {
 				tags = new TTag[tagGroups.Count];
 
 				for (int tagI = 0; tagI < tagGroups.Count; tagI++) {
-					tags[tagI] = new TTag() { EnumValue = new OneSetProperty<string>(tags[tagI].EnumValue) };
+					tags[tagI] = new TTag() { EnumValue = tags[tagI].EnumValue };
 				}
 			} else {
 				throw new ArgumentException("No tags found in the parameter 'message'.");
 			}
 
 			if (descMatch.Success) desc = descMatch.Groups[0].Value;
-			
+
 			return new Message(tags, message.Data, desc);
 		}
 		#endregion

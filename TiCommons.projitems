@@ -12,14 +12,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\CommandLineX.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumX.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\GridTerminalSystemX.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\LinqX.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ProgrammableBlockX.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringX.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TerminalBlockX.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TextSurfaceX.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IGCTi\IGCTi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IGCTi\Message.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\Fern.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\FernBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util\XSetPropertyBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\OneSetProperty.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Util\InitProperty.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\EnumClass.cs" />
   </ItemGroup>
   <ItemGroup>
