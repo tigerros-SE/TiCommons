@@ -1,5 +1,5 @@
 ﻿# TiCommons
-A shared project with utility classes, designed to work independently.
+A shared project with utility classes, designed to be self-contained.
 
 ### NOTE:
 A separate documentation file for shared projects is... troublesome. 
