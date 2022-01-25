@@ -76,13 +76,13 @@ namespace IngameScript.TiCommons.Util.Atlang {
 		}
 
 		public override string ToString() {
-			string st = "";
+			var st = new StringBuilder();
 
-			foreach (var at in Root.Children()) {
-				st += AddFern(st, at.Name, at.Value);
+			foreach (var fern in Root.Children()) {
+				st.Append(AddFern(st.ToString(), fern.Index, fern.Value));
 			}
 
-			return st;
+			return st.ToString();
 		}
 	}
 }

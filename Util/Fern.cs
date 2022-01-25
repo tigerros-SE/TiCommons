@@ -18,8 +18,9 @@ using VRage.Game.ModAPI.Ingame.Utilities;
 using VRage.Game.ObjectBuilders.Definitions;
 using VRageMath;
 
-namespace IngameScript.TiCommons.Util.Atlang {
+namespace IngameScript.TiCommons.Fern {
 	public class Fern {
+		public Fern Root { get; set; }
 		public object Index { get; set; }
 		public object Value { get; set; }
 		public Fern Parent { get; set; }
@@ -40,7 +41,7 @@ namespace IngameScript.TiCommons.Util.Atlang {
 		private static System.Text.RegularExpressions.Regex FernRX =
 			new System.Text.RegularExpressions.Regex(@"""(?<Index>[^:]+)""\s*:\s*""(?<Value>[^""]*)"";");
 		private static System.Text.RegularExpressions.Regex ArrayRX =
-			new System.Text.RegularExpressions.Regex(@"""(?<Index>[^:]+)""\s*:\s*{{(?<Value>)");
+			new System.Text.RegularExpressions.Regex(@"""(?<Index>[^:]+)""\s*:\s*{(?<Value>)");
 
 		/*
 		[Root=
@@ -53,18 +54,18 @@ namespace IngameScript.TiCommons.Util.Atlang {
 		*/
 
 		public static Fern FromString(string s) {
-			var root = new Fern("Root", new List<Fern>());
 			var matches = ArrayRX.Matches(s);
 
 			if (matches.Count > 0) {
 				foreach (System.Text.RegularExpressions.Match match in matches) {
 					var index = match.Groups["Index"].Value;
+					var value = match.Groups["Value"].Value;
 
-					
+					FromString(value);
 				}
 			}
 
-			return attributes;
+			return Root;
 		}
 
 		public Fern(object index = null, object value = null, Fern parent = null) {
@@ -127,7 +128,7 @@ namespace IngameScript.TiCommons.Util.Atlang {
 		public string ToString(bool prettify)
 			=> HasChildren
 				? $"\"{Index}\":{(prettify ? " " : "")}{{" +
-					$"{Children().Aggregate<string, Fern>((carry, curr) => carry + (prettify ? "\n\t" : "") + curr.ToString(prettify))}" +
+					$"{Children().Aggregate<StringBuilder, Fern>((carry, curr) => carry.Append(prettify ? "\n\t" : "").Append(curr.ToString(prettify)))}" +
 					$"{(prettify ? "\n" : "")}}}"
 				: $"\"{Index}\":{(prettify ? " " : "")}{Value}";
 	}
